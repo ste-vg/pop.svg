@@ -4,8 +4,19 @@
   "description": "Path on Path SVG",
   "main": "index.js",
   "scripts": {
+    "build": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Steve Gardner (steveg3003)",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "html-server": "^0.1.1",
+    "source-map-loader": "^0.1.6",
+    "ts-loader": "^2.0.1",
+    "typescript": "^2.2.1",
+    "webpack": "^2.2.1"
+  },
+  "dependencies": {
+    "snapsvg": "^0.5.1"
+  }
 }
