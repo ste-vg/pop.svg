@@ -1,0 +1,11 @@
+{
+  "name": "pop.svg",
+  "version": "0.0.1",
+  "description": "Path on Path SVG",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Steve Gardner (steveg3003)",
+  "license": "ISC"
+}
