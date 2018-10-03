@@ -1,5 +1,4 @@
-import './index.scss';
-import { App } from './app/app';
-
-let container = document.getElementById('app');
-if(container) new App(container);
+export { CommandPath } from "./paths/commands";
+export { PathGuide } from "./paths/pathGuide";
+export { ReferencePath } from "./paths/referencePath";
+export { TranslationPath } from "./paths/translationPath";

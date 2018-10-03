@@ -1,5 +1,5 @@
 import { parseSVG, makeAbsolute } from "svg-path-parser";
-import { Point } from "../Point";
+import { Point } from "./Point";
 import { CommandPath } from "./commands";
 
 export class ReferencePath

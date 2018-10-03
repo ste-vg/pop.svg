@@ -1,5 +1,5 @@
 import { ReferencePath } from "./referencePath";
-import { Point } from "../Point";
+import { Point } from "./Point";
 import { CommandPath } from "./commands";
 
 export class TranslationPath
