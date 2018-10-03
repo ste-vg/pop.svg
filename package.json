@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ste-vg/pop-svg.git"
+    "url": "git+https://github.com/ste-vg/pop.svg.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ste-vg/pop-svg/issues"
+    "url": "https://github.com/ste-vg/pop.svg/issues"
   },
-  "homepage": "https://github.com/ste-vg/pop-svg#readme",
+  "homepage": "https://github.com/ste-vg/pop.svg#readme",
   "devDependencies": {
     "@types/chai": "^4.1.4",
     "@types/mocha": "^5.2.2",
