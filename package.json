@@ -2,7 +2,8 @@
   "name": "pop.svg",
   "version": "0.1.0",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "start": "webpack-dev-server",
     "build": "tsc",
