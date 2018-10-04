@@ -9,8 +9,6 @@ export class PathGuide
 
     createLinesPath(count:number):any
     {
-        let path = document.getElementById('lines');
-
         let linesPath = '';
 
         for(let i = 0; i < count; i++)
@@ -18,8 +16,6 @@ export class PathGuide
             linesPath += `M 0 ${i* 2} H 10`;
         }
 
-        if(path) path.setAttribute('d', linesPath);
-
-        return path;
+        return linesPath;
     }
 }

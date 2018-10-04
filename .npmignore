@@ -1,0 +1,11 @@
+node_modules
+.git
+npm-debug.log
+Thumbs.db
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+temp
+.cache
+.nyc_output
+src
