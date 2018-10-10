@@ -2,6 +2,12 @@ import { ReferencePath } from "./referencePath";
 import { Point } from "./Point";
 import { CommandPath } from "./commands";
 
+interface PointInfo
+{
+    position: Point;
+    rotation: number;
+}
+
 export class TranslationPath
 {
     path:SVGPathElement;
@@ -9,8 +15,12 @@ export class TranslationPath
     endWidth:number;
     length:number = 0;
 
-    constructor(element:any, width:number, endWidth?:number)
+    percentFidelity:number;
+    percentLookup:PointInfo[] = [];
+
+    constructor(element:any, width:number, endWidth?:number, fidelity:number = 0.001)
     {
+        this.percentFidelity = fidelity;
         this.path = element;
         this.width = width;
         this.endWidth = endWidth !== undefined ? endWidth : width;
@@ -20,9 +30,35 @@ export class TranslationPath
     updatePath()
     {
         this.length = this.path.getTotalLength();
+
+        let count = 0;
+        while(count <= 1)
+        {
+            let nextCount = count + this.percentFidelity;
+            let lastCount = count - this.percentFidelity;
+
+            let position = this.path.getPointAtLength(this.length * count);
+            let anglePosition = {x: 0, y:0 };
+            let rotation = 0;
+
+            if(nextCount > 1)
+            {
+                anglePosition = this.path.getPointAtLength(this.length * lastCount);
+                rotation = this.getRotation(anglePosition, position);
+            }
+            else
+            {
+                anglePosition = this.path.getPointAtLength(this.length * nextCount);
+                rotation = this.getRotation(position, anglePosition);
+            }
+            
+            this.percentLookup.push({position: position, rotation: rotation});
+            count += this.percentFidelity;
+           // if(count > 1) count = 1;
+        }
     }
 
-    getPath(path:ReferencePath, width?: number, endWidth?:number):string
+    getPath(path:ReferencePath, width?: number, endWidth?:number, start:number = 0, end:number = 1):string
     {
         let newPath = '';
         let lastPoint = {x: 0, y: 0};
@@ -46,12 +82,12 @@ export class TranslationPath
                     let y = direction == 'y' ? keys[i] : keys[i+1] != null ? keys[i+1] : null;
 
                     let xValue = x ? command['p' + x] : lastPoint.x;
-                    let yValue = y ? command['p' + y] :  lastPoint.y;
+                    let yValue = y ? command['p' + y] : lastPoint.y;
 
                     lastPoint.x = xValue;
                     lastPoint.y = yValue;
 
-                    let newPoint = this.percentToPath(xValue, yValue, width || this.width, endWidth || this.endWidth);
+                    let newPoint = this.percentToPath(xValue, yValue, width || this.width, endWidth || this.endWidth, start, end);
 
                     newPath += ' ' + newPoint.x;
                     newPath += ' ' + newPoint.y;
@@ -70,15 +106,25 @@ export class TranslationPath
         return newWidth;
     }
 
-    percentToPath(x:number, y:number, width:number, endWidth:number):Point
+    getPointAtLength(percentage:number):PointInfo
+    {
+        let p = Math.round(percentage / this.percentFidelity);
+
+        if(p >= this.percentLookup.length) return this.percentLookup[this.percentLookup.length - 1];
+        if(p < 0) return this.percentLookup[0];
+        return this.percentLookup[p];
+    }
+
+    percentToPath(x:number, y:number, width:number, endWidth:number, start:number, end:number):Point
     {
         let angleDistance = 0.01;
-        let pt = this.path.getPointAtLength(this.length * y);
-        let anglePt = y < angleDistance ? this.path.getPointAtLength(this.length * (y + angleDistance)) : this.path.getPointAtLength(this.length * (y - angleDistance));
+        let p = y * (end - start) + start;
 
-        let rotation = this.getRotation(y < angleDistance ? anglePt : pt, y < angleDistance ? pt : anglePt);
+        let pointInfo = this.getPointAtLength(p);
+        let pt = pointInfo.position;
+        let rotation = pointInfo.rotation;
 
-        let w = this.getWidth(y, width, endWidth);
+        let w = this.getWidth(p, width, endWidth);
 
         let origin:Point = {x: pt.x, y: pt.y};
         let target:Point = {x: pt.x - (w / 2) + (w * x), y: pt.y};
